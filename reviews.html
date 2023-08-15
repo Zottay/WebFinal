@@ -1,0 +1,134 @@
+<!-- Honesty Statement:
+I declare that my assessment is wholly my own work in accordance with Seneca Academic Policy. No part of this assessment has been copied manually or electronically from any other source (including web sites) 
+except for the information supplied by the WEB222 instructors and / or made available in this assessment for my use. I also declare that no part of this assignment has been distributed to other students. -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reviews - Hidden Gems of Toronto</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <style>
+        .review-card {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .review-card h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        .review-card time {
+            color: #777;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="media/toronto-logo.png" alt="Toronto Logo" id="site-logo">
+            <h1>Hidden Gems of Toronto</h1>
+        </div>
+        <p>Discover the undiscovered treasures of Toronto!</p>
+        <nav>
+            <div class="nav-link"><a href="index.html">Home</a></div>
+            <div class="nav-link"><a href="info.html">Info</a></div>
+            <div class="nav-link"><a href="reviews.html">Reviews</a></div>
+            <div class="nav-link"><a href="about.html">About</a></div>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+        <h2>Reviews</h2>
+        <div id="reviews-container"></div>
+
+        <h3>Submit Your Review (1-5 Stars)</h3>
+        <form id="review-form">
+            <input type="text" id="name" placeholder="Name" required>
+            <input type="date" id="date" required>
+            <input type="number" id="rating" min="1" max="5" required placeholder="Rating (1-5)">
+            <br> <br>
+            <textarea id="review" placeholder="Your Review" required></textarea>
+            <button type="submit">Submit review</button>
+        </form>
+    </main>
+
+    <footer>
+        <section id="newsletter">
+            <h2>Join Our Newsletter</h2>
+            <h3>You can unsubscribe at any time</h3>
+            <form action="https://httpbin.org/post" method="post">
+                <input type="email" name="email" placeholder="Enter your email" required>
+                <input type="hidden" name="creator" value="Your Name">
+                <button type="submit">Join</button>
+            </form>
+        </section>
+    </footer>
+
+    <script src="js/data.js"></script>
+
+    <script>
+        // Function to generate stars based on rating
+        function generateStars(rating) {
+            let stars = "";
+            for (let i = 1; i <= 5; i++) {
+                stars += i <= rating ? "★" : "☆";
+            }
+            return stars;
+        }
+
+        // Function to create a review card
+        function createReviewCard(review) {
+            return `
+                <div class="review-card">
+                    <h3>${review.name}</h3>
+                    <time datetime="${review.date}">${new Date(review.date).toLocaleDateString()}</time>
+                    <p>Rating: ${generateStars(review.rating)}</p>
+                    <p>${review.text}</p>
+
+                </div>
+            `;
+        }
+
+        // Render all reviews when the page loads
+        document.addEventListener("DOMContentLoaded", function() {
+            const reviewsContainer = document.getElementById("reviews-container");
+            let allReviews = window.reviewData.map(createReviewCard).join("");
+            reviewsContainer.innerHTML = allReviews;
+        });
+
+        document.getElementById("review-form").addEventListener("submit", function(e) {
+            e.preventDefault(); // Prevent actual form submission
+
+            // Fetch review details
+            const name = document.getElementById("name").value;
+            const date = document.getElementById("date").value;
+            const rating = parseInt(document.getElementById("rating").value);
+            const text = document.getElementById("review").value;
+
+
+            // Add new review to reviewData array
+            window.reviewData.push({ name, date, rating, text });
+
+
+            // Re-render all reviews
+            const reviewsContainer = document.getElementById("reviews-container");
+            let allReviews = window.reviewData.map(createReviewCard).join("");
+            reviewsContainer.innerHTML = allReviews;
+        });
+    </script>
+    </section>
+</body>
+
+
+</html>
